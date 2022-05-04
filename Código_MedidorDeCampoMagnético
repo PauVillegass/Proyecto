@@ -1,0 +1,35 @@
+#include <Wire.h>
+#include <LCD.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd (0x27, 2, 1, 0, 4, 5, 6, 7);
+
+int sensor;
+int gauss;
+
+void setup() {
+  Serial.begin(9600);
+  lcd.setBacklightPin(3,POSITIVE);
+  lcd.setBacklight(HIGH);
+  lcd.begin(16,  2);
+  lcd.clear();
+}
+
+void loop() {
+  sensor = analogRead(A0);
+  int(gauss) = map(sensor, 0, 1023, -1000, 1000);
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Gauss: ");
+  lcd.print(abs(gauss));
+  lcd.setCursor(0, 1);
+  lcd.print("Polo: ");
+  if (gauss >= 0) {
+    lcd.print("Positivo");
+  }
+  else{
+    lcd.print("Negativo");
+  }
+  delay(500);
+}
